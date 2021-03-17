@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="cn.sju.SpringStore.mapper.DistrictMapper">
+
+ 	<select id="findByParent" resultType="cn.sju.SpringStore.entiy.District">
+ 		select id, parent, code, name from t_dict_district where parent=#{parent}
+ 	</select>
+ 	
+ 	<select id="findByCode" resultType="cn.sju.SpringStore.entiy.District">
+    	SELECT id, parent, code, name FROM t_dict_district WHERE code=#{code}
+	</select>
+</mapper>

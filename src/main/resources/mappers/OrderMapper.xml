@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="cn.sju.SpringStore.mapper.OrderMapper">
+	<insert id="createOrder" useGeneratedKeys="true" keyProperty="id">
+		insert into store_order
+		  (order_no,user_id,payment,payment_type,
+		  postage,name,address,phone,status,
+		  payment_time,send_time,end_time,close_time,
+		  create_user,create_time,update_user,update_time) 
+		values (
+		   #{orderNo},#{userId},#{payment},#{paymentType},
+		  #{postage},#{name},#{address},#{phone},#{status},
+		  #{paymentTime},#{sendTime},#{endTime},#{closeTime}, 
+		  #{createdUser},#{createdTime},#{modifiedUser},#{modifiedTime}
+		   )
+	</insert>
+	
+	<insert id="createOrderItem" useGeneratedKeys="true" keyProperty="id">
+		insert into store_order_item
+		  (user_id,order_no,product_id,product_name,
+		  product_image,current_unit_price,quantity,total_price,
+		  create_user,create_time,update_user,update_time) 
+		values (
+		   #{userId},#{orderNo},#{productId},#{productName},
+		  #{productImage},#{currentUnitPrice},#{quantity},#{totalPrice}
+		  ,#{createdUser},#{createdTime},#{modifiedUser},#{modifiedTime}
+		   )
+	</insert>
+ 	
+ 	 <select id="getOrderByOrderNo" resultType="cn.sju.SpringStore.entiy.Order">
+ 		select * from store_order where order_no=#{orderNo} and user_id=#{uid}
+ 	</select>
+ 	
+ 	 <select id="getNotPayOrder" resultType="java.lang.Integer">
+ 		select order_no from store_order where user_id=#{uid}
+ 	</select>
+	
+ 	 <select id="getOrderByUserId" resultType="cn.sju.SpringStore.entiy.Order">
+ 		select user_id userId,order_no orderNo,payment,payment_type paymentType,
+		  postage,name,address,phone,status,create_time createdTime 
+		  from store_order where user_id=#{uid}
+ 	</select>
+ 	
+ 	<select id="getOrderItem" resultType="cn.sju.SpringStore.entiy.OrderItem">
+ 		select user_id userId,order_no orderNo,product_id productId,product_name productName,
+		  product_image productImage,current_unit_price currentUnitPrice,quantity,total_price totalPrice
+		  from store_order_item where order_no=#{orderNo} and user_id=#{uid}
+ 	</select>
+ 	
+ 	<update id="payOrder">
+ 		update store_order set status=#{status},
+ 		payment_type=#{paymentType},payment_time=#{paymentTime}
+ 		,update_user=#{modifiedUser},update_time=#{modifiedTime}
+ 		 where order_no=#{orderNo} and user_id=#{userId}
+ 	</update>
+ 	
+ 	<!-- 更新订单状态 -->
+<!-- Integer updateStatus(
+        @Param("id") Integer id,
+        @Param("status") Integer status,
+        @Param("username") String username,
+        @Param("modifiedTime") Date modifiedTime) -->
+<update id="updateStatus">
+    update 
+        t_order 
+    set 
+        status=#{status}, 
+        update_user=#{modifiedUser}, 
+        update_time=#{modifiedTime} 
+    where 
+        order_no=#{orderNo}
+</update>
+ 	
+</mapper>
+ 
